@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:13.3
+    hostname: postgres
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "regrit"
+      POSTGRES_PASSWORD: "123"
+    volumes:
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - ./db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  flask:
+    build: .
+    environment:
+      - FLASK_ENV=development
+      - PYTHONUNBUFFERED=True
+    restart: on-failure
+    ports:
+      - "5000:5000"
+    command: python app.py
+    depends_on:
+      - postgres
