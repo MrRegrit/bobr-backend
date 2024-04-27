@@ -1,11 +1,12 @@
 from datetime import timedelta
 
 from flask import Flask, g, request, jsonify
-from flask_jwt_simple import JWTManager, jwt_required, get_jwt_identity
+from flask_jwt_simple import jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from db_code import FlaskDB, get_db
 from misc import make_resp, check_keys, create_jwt_generate_response
+from server.myjwt import MyJWTManager
 from validators import Validator
 
 app = Flask(__name__)
@@ -14,7 +15,7 @@ app.config["JWT_SECRET_KEY"] = "top_sicret"
 app.config["JWT_EXPIRES"] = timedelta(hours=24)
 app.config["JWT_IDENTITY_CLAIM"] = "user"
 app.config["JWT_HEADER_NAME"] = "authorization"
-app.jwt = JWTManager(app)
+app.jwt = MyJWTManager(app)
 
 postgres: FlaskDB = None
 
